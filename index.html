@@ -3,39 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Troca Legal</title> 
+    <title>Troca Legal</title>
+    <link rel="stylesheet" href="style.css">  <!-- Link para o arquivo CSS -->
+    <script type="module" src="app.js"></script>  <!-- Link para o arquivo JavaScript -->
     <link rel="shortcut icon" href="plant.png" type="image/x-icon">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #ccc;
-        }
-        #status {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -44,30 +15,5 @@
         <button id="shareButton">Compartilhar</button>
         <p id="status">Compartilhamentos: <span id="count">0</span>/15</p>
     </div>
-
-    <script>
-        let shareCount = localStorage.getItem("shareCount") || 0;
-        document.getElementById("count").innerText = shareCount;
-
-        document.getElementById("shareButton").addEventListener("click", async () => {
-            try {
-                await navigator.share({
-                    title: "Ganhe uma muda!",
-                    text: "Compartilhe este link para ganhar uma muda de planta!",
-                    url: window.location.href,
-                });
-                
-                shareCount++;
-                localStorage.setItem("shareCount", shareCount);
-                document.getElementById("count").innerText = shareCount;
-                
-                if (shareCount >= 15) {
-                    alert("Parabéns! Você atingiu 15 compartilhamentos e pode resgatar sua muda!");
-                }
-            } catch (error) {
-                console.error("Erro ao compartilhar", error);
-            }
-        });
-    </script>
 </body>
 </html>
