@@ -15,11 +15,101 @@
         <p id="status">Compartilhamentos: <span id="count">0</span>/15</p>
     </div>
 
-    <!-- Firebase SDKs (via CDN) -->
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+    <!-- Firebase SDKs via CDN (modo módulo) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    <!-- Código principal -->
-    <script src="app.js"></script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAgo8BbtCRTkUvqwPMIJTq4hUsBCXvaEo",
+            authDomain: "projeto-troca-78f8c.firebaseapp.com",
+            projectId: "projeto-troca-78f8c",
+            storageBucket: "projeto-troca-78f8c.appspot.com",
+            messagingSenderId: "262913602560",
+            appId: "1:262913602560:web:ed38fff0ba12e11999d4e5",
+            measurementId: "G-YX9FYEXWQ9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Código para lidar com o compartilhamento
+        const shareButton = document.getElementById("shareButton");
+        const countSpan = document.getElementById("count");
+
+        // Pega o ID do usuário (gerando um ID único para cada pessoa)
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+            userId = "user_" + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem("userId", userId);
+        }
+
+        // Função para atualizar a contagem de compartilhamentos no Firestore
+        async function updateShareCount() {
+            try {
+                const userRef = doc(db, "compartilhamentos", userId);
+                const docSnap = await getDoc(userRef);
+
+                let shareCount = 0;
+                if (docSnap.exists()) {
+                    shareCount = docSnap.data().count || 0;
+                }
+
+                shareCount++; // Incrementa o contador
+                await setDoc(userRef, { count: shareCount });
+
+                countSpan.innerText = shareCount;
+                console.log("Compartilhamento atualizado:", shareCount);
+
+                if (shareCount >= 15) {
+                    alert("Parabéns! Você atingiu 15 compartilhamentos e pode resgatar sua muda!");
+                }
+            } catch (error) {
+                console.error("Erro ao atualizar compartilhamentos:", error);
+            }
+        }
+
+        // Evento de clique no botão de compartilhamento
+        shareButton.addEventListener("click", async () => {
+            console.log("Botão de compartilhar clicado!");
+
+            if (!navigator.share) {
+                alert("Compartilhamento não suportado neste navegador!");
+                return;
+            }
+
+            try {
+                await navigator.share({
+                    title: "Ganhe uma muda!",
+                    text: "Compartilhe este link para ganhar uma muda de planta!",
+                    url: window.location.href,
+                });
+
+                console.log("Compartilhamento realizado com sucesso!");
+                updateShareCount(); // Atualiza a contagem de compartilhamento no Firestore
+            } catch (error) {
+                console.error("Erro ao compartilhar:", error);
+            }
+        });
+
+        // Pega a contagem inicial ao carregar a página
+        async function loadInitialCount() {
+            try {
+                const userRef = doc(db, "compartilhamentos", userId);
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    countSpan.innerText = docSnap.data().count || 0;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar compartilhamentos:", error);
+            }
+        }
+
+        loadInitialCount();
+    </script>
 </body>
 </html>
