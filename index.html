@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Troca Legal</title>
-    <link rel="stylesheet" href="style.css">  <!-- Link para o arquivo CSS -->
-    <script type="module" src="app.js"></script>  <!-- Link para o arquivo JavaScript -->
+    <title>Troca Legal</title> 
     <link rel="shortcut icon" href="plant.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css"> <!-- Arquivo CSS separado -->
 </head>
 <body>
     <div class="container">
         <h1>Compartilhe e Ganhe uma Muda!</h1>
-        <p>Compartilhe este link com 15 pessoas e ganhe uma muda de planta.</p>
+        <p>Compartilhe este link com 14 pessoas e ganhe uma muda de planta.</p>
         <button id="shareButton">Compartilhar</button>
         <p id="status">Compartilhamentos: <span id="count">0</span>/15</p>
     </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+
+    <!-- Código principal -->
+    <script src="app.js"></script>
 </body>
 </html>
