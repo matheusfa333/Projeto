@@ -35,6 +35,13 @@ async function registrarCompartilhamento(userId) {
 
 // Evento de clique no botão de compartilhamento
 document.getElementById("shareButton").addEventListener("click", async () => {
+    console.log("Botão clicado!");  // Verifique se isso aparece no console
+
+    if (!navigator.share) {
+        alert("Compartilhamento não suportado neste navegador!");
+        return;
+    }
+
     try {
         await navigator.share({
             title: "Ganhe uma muda!",
@@ -42,10 +49,8 @@ document.getElementById("shareButton").addEventListener("click", async () => {
             url: window.location.href,
         });
 
-        const userId = "usuario123";  // Aqui você pode usar um identificador único para o usuário
-        registrarCompartilhamento(userId);
-
+        console.log("Compartilhamento feito com sucesso!");
     } catch (error) {
-        console.error("Erro ao compartilhar", error);
+        console.error("Erro ao compartilhar:", error);
     }
 });
